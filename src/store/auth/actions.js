@@ -1,5 +1,5 @@
 export default {
-  /* async login(context, payload) {
+  async login(context, payload) {
     const response = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCzML-2u1_uiqonzx2ScV2kTM14p59ux3I",
       {
@@ -26,7 +26,7 @@ export default {
       userId: responseData.localId,
       tokenExpiration: responseData.expiresIn,
     });
-  }, */
+  },
 
   async signUp(context, payload) {
     const response = await fetch(
@@ -44,7 +44,8 @@ export default {
 
     if (!response.ok) {
       console.log(responseData);
-      const error = new Error(responseData.message || "failed to Auth");
+      const error = new Error(responseData.message || "failed to authenticate");
+      console.log(responseData.message)
       throw error;
     }
 

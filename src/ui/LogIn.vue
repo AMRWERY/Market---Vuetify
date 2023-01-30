@@ -20,7 +20,7 @@
               <hr />
               <pre>OR</pre>
 
-              <v-form ref="form" @submit.prevent="submitForm">
+              <v-form ref="form">
                 <v-text-field
                   v-model="email"
                   type="email"
@@ -43,7 +43,7 @@
             </div>
             <v-card-actions>
               <v-btn variant="outlined" @click="submitForm"> Login </v-btn>
-              <v-btn variant="outlined" type="button"> Signup </v-btn>
+              <v-btn variant="outlined" @click="submitForm"> Signup </v-btn>
             </v-card-actions>
           </v-card-item>
         </div>
@@ -62,7 +62,7 @@ export default {
   data: () => ({
     valid: true,
     email: "",
-    password: null,
+    password: '',
     checkbox: false,
     mode: 'login'
   }),
@@ -79,16 +79,22 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    submitForm() {
+    async submitForm() {
       this.valid = true;
-      if (this.mode === 'login') {
-        // ....
-      } else {
-        this.$store.dispatch('signUp', {
-          email: this.email,
-          password: this.password
-        })
-        console.log(this.$store.dispatch)
+      
+      const actionPayload = {
+        email: this.email,
+        password: this.password,
+      };
+
+      try {
+        if (this.mode === 'login') {
+          await this.$store.dispatch('login', actionPayload);
+        } else {
+          await this.$store.dispatch('signup', actionPayload);
+        }
+      } catch (err) {
+        this.error = err.message || 'Failed to authenticate, try later.';
       }
     },
   },
